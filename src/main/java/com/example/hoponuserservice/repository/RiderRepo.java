@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RiderRepo extends CrudRepository<Rider,String> {
     @Override
     Optional<Rider> findById(String s);
+
+
 }

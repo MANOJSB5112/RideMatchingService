@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-@DynamoDBTable(tableName = "rider")
+@DynamoDBTable(tableName = "RiderTable")
 public class Rider {
     @Id
     @DynamoDBHashKey(attributeName = "id")
