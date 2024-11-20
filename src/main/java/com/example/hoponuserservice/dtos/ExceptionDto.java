@@ -1,12 +1,11 @@
 package com.example.hoponuserservice.dtos;
 
-import com.example.hoponuserservice.model.Rider;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RiderCreationResponseDto {
-    private Rider rider;
+public class ExceptionDto {
+    private String message;
     private ResponseStatus responseStatus;
 }
