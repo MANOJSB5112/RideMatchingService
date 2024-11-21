@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class RiderController {
     }
 
     @PostMapping("/rider")
-    public ResponseEntity<RiderCreationResponseDto> createNewRider(RiderCreationRequestDto riderCreationRequestDto) throws RiderAlreadyPresentException {
+    public ResponseEntity<RiderCreationResponseDto> createNewRider(@RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderAlreadyPresentException {
         String name=riderCreationRequestDto.getName();
         String email=riderCreationRequestDto.getEmail();
         String phoneNumber=riderCreationRequestDto.getPhoneNumber();
