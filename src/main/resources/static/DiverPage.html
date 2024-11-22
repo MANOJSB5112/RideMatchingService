@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1>Driver Page</h1>
+<div>
+    <label for="driverId">Driver ID:</label>
+    <input type="text" id="driverId" placeholder="Enter your Driver ID" />
+</div>
+<div>
+    <label for="currentLat">Current Latitude:</label>
+    <input type="text" id="currentLat" placeholder="Enter Current Latitude" />
+</div>
+<div>
+    <label for="currentLng">Current Longitude:</label>
+    <input type="text" id="currentLng" placeholder="Enter Current Longitude" />
+</div>
+<button id="goOnlineButton">Go Online</button>
+
+<h2>Ride Details</h2>
+<textarea id="rideDetails" rows="10" cols="50" readonly></textarea>
+
+<script>
+    const socket = new SockJS('http://localhost:8181/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        // Subscribe to ride notifications
+        stompClient.subscribe('/topic/ride/notification/' + document.getElementById('driverId').value, function (rideDetails) {
+            document.getElementById('rideDetails').value = rideDetails.body;
+        });
+    });
+
+    document.getElementById('goOnlineButton').onclick = function () {
+        const driverId = document.getElementById('driverId').value;
+        const currentLat = parseFloat(document.getElementById('currentLat').value);
+        const currentLng = parseFloat(document.getElementById('currentLng').value);
+
+        const driverLocationUpdate = {
+            driverId: driverId,
+            latitude: currentLat,
+            longitude: currentLng
+        };
+
+        // Send the driver's location to the backend
+        stompClient.send("/app/driver/updateLocation", {}, JSON.stringify(driverLocationUpdate));
+        console.log('Driver location updated:', driverLocationUpdate);
+    };
+</script>
+</body>
+</html>

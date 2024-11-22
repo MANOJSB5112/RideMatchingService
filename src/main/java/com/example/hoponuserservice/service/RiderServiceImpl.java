@@ -23,7 +23,6 @@ public class RiderServiceImpl implements RiderService {
     @Override
     @Transactional
     public Rider createNewRider(String name, String email, String phoneNumber, double latitude, double longitude) throws RiderAlreadyPresentException {
-        // Validate input parameters (consider using a validation framework)
         if (name == null || email == null || phoneNumber == null) {
             throw new IllegalArgumentException("Name, email, and phone number must not be null");
         }

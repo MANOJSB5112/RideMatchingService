@@ -4,7 +4,6 @@ package com.example.hoponuserservice.repository;
 
 import org.socialsignin.spring.data.dynamodb.repository.DynamoDBCrudRepository;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
-import org.springframework.data.repository.CrudRepository;
 import com.example.hoponuserservice.model.Rider;
 import org.springframework.stereotype.Repository;
 

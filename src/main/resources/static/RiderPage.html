@@ -1,0 +1,72 @@
+<!-- rider.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1>Rider Page</h1>
+<div>
+    <label for="riderId">Rider ID:</label>
+    <input type="text" id="riderId" placeholder="Enter your Rider ID" />
+</div>
+<div>
+    <label for="sourceLat">Source Latitude:</label>
+    <input type="text" id="sourceLat" placeholder="Enter Source Latitude" />
+</div>
+<div>
+    <label for="sourceLng">Source Longitude:</label>
+    <input type="text" id="sourceLng" placeholder="Enter Source Longitude" />
+</div>
+<div>
+    <label for="destLat">Destination Latitude:</label>
+    <input type="text" id="destLat" placeholder="Enter Destination Latitude" />
+</div>
+<div>
+    <label for="destLng">Destination Longitude:</label>
+    <input type="text" id="destLng" placeholder="Enter Destination Longitude" />
+</div>
+<button id="requestRideButton">Request Ride</button>
+
+<h2>Requested Ride Details</h2>
+<textarea id="rideDetails" rows="10" cols="50" readonly></textarea>
+
+<script>
+    const socket = new SockJS('http://localhost:8181/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        // Subscribe to server's ride confirmation endpoint
+        stompClient.subscribe('/topic/ride/confirmation', function (message) {
+            const confirmation = JSON.parse(message.body);
+            document.getElementById('rideDetails').value = JSON.stringify(confirmation, null, 2);
+            console.log("Ride confirmation received:", confirmation);
+        });
+    });
+
+    document.getElementById('requestRideButton').onclick = function () {
+        const riderId = document.getElementById('riderId').value;
+        const sourceLat = parseFloat(document.getElementById('sourceLat').value);
+        const sourceLng = parseFloat(document.getElementById('sourceLng').value);
+        const destLat = parseFloat(document.getElementById('destLat').value);
+        const destLng = parseFloat(document.getElementById('destLng').value);
+
+        const rideRequest = {
+            riderId: riderId,
+            source: { latitude: sourceLat, longitude: sourceLng },
+            destination: { latitude: destLat, longitude: destLng }
+        };
+
+        // Send the ride request
+        stompClient.send("/app/ride/request", {}, JSON.stringify(rideRequest));
+        console.log('Ride request sent:', rideRequest);
+    };
+</script>
+</body>
+</html>
