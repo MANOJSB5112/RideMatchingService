@@ -1,4 +1,4 @@
-package com.example.hoponuserservice.config;
+package com.example.hoponuserservice.RedisGeo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

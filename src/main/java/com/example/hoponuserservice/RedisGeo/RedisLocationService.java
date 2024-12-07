@@ -1,6 +1,5 @@
-package com.example.hoponuserservice.service;
+package com.example.hoponuserservice.RedisGeo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class LocationService {
+public class RedisLocationService {
 
     private static final String DRIVER_LOCATION_KEY = "driver_locations";
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public LocationService(RedisTemplate<String, String> redisTemplate) {
+    public RedisLocationService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

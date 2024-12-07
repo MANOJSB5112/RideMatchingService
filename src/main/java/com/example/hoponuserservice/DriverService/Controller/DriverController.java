@@ -1,26 +1,24 @@
-package com.example.hoponuserservice.controller;
+package com.example.hoponuserservice.DriverService.Controller;
 
-import com.example.hoponuserservice.service.LocationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.hoponuserservice.RedisGeo.RedisLocationService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/driver")
 public class DriverController {
 
+    private RedisLocationService redisLocationService;
 
-    private LocationService locationService;
-
-    public DriverController(LocationService locationService)
+    public DriverController(RedisLocationService redisLocationService)
     {
-        this.locationService=locationService;
+        this.redisLocationService = redisLocationService;
     }
 
     @PostMapping("/location")
     public String updateDriverLocation(@RequestParam String driverId,
                                        @RequestParam double latitude,
                                        @RequestParam double longitude) {
-        locationService.addDriverLocation(driverId, latitude, longitude);
+        redisLocationService.addDriverLocation(driverId, latitude, longitude);
         return "Location updated successfully!";
     }
 }

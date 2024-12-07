@@ -1,6 +1,7 @@
-package com.example.hoponuserservice.service;
+package com.example.hoponuserservice.RiderPackage.Service;
 
 import com.example.hoponuserservice.Exceptions.RiderAlreadyPresentException;
+import com.example.hoponuserservice.RiderPackage.Service.RiderService;
 import com.example.hoponuserservice.model.Location;
 import com.example.hoponuserservice.model.Rider;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +43,15 @@ public class RiderServiceImpl implements RiderService {
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         newRider.setLocation(location);
+        System.out.println("Creating rider");
+        Rider rider= riderRepo.save(newRider);
+        System.out.println("User saved: " + rider);
+        return rider;
+    }
 
-        return riderRepo.save(newRider);
+    @Override
+    public List<Rider> getAllRiders() {
+        return riderRepo.findAll();
+
     }
 }

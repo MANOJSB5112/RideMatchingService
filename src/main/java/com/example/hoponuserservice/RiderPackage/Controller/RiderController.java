@@ -1,19 +1,15 @@
-package com.example.hoponuserservice.controller;
+package com.example.hoponuserservice.RiderPackage.Controller;
 
 import com.example.hoponuserservice.Exceptions.RiderAlreadyPresentException;
+import com.example.hoponuserservice.dtos.*;
 import com.example.hoponuserservice.dtos.ResponseStatus;
-import com.example.hoponuserservice.dtos.RideRequest;
-import com.example.hoponuserservice.dtos.RiderCreationRequestDto;
-import com.example.hoponuserservice.dtos.RiderCreationResponseDto;
 import com.example.hoponuserservice.model.Rider;
-import com.example.hoponuserservice.service.LocationService;
-import com.example.hoponuserservice.service.RiderService;
+import com.example.hoponuserservice.RedisGeo.RedisLocationService;
+import com.example.hoponuserservice.RiderPackage.Service.RiderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +19,12 @@ import java.util.List;
 public class RiderController {
 
     private final RiderService riderService;
-    private LocationService locationService;
+    private RedisLocationService redisLocationService;
 
     @Autowired
-    public RiderController(RiderService riderService,LocationService locationService) {
+    public RiderController(RiderService riderService, RedisLocationService redisLocationService) {
         this.riderService = riderService;
-        this.locationService=locationService;
+        this.redisLocationService = redisLocationService;
     }
 
     @PostMapping("/new")
@@ -52,6 +48,16 @@ public class RiderController {
     public List<String> getNearestDrivers(@RequestParam double latitude,
                                           @RequestParam double longitude,
                                           @RequestParam double radiusInKm) {
-        return locationService.findNearestDrivers(latitude, longitude, radiusInKm);
+        return redisLocationService.findNearestDrivers(latitude, longitude, radiusInKm);
+    }
+
+    @GetMapping("/all")
+    public RiderListDto getAllRiders()
+    {
+        List<Rider> riders=riderService.getAllRiders();
+        RiderListDto riderListDto=new RiderListDto();
+        riderListDto.setRiders(riders);
+        riderListDto.setResponseStatus(ResponseStatus.SUCCESS);
+        return riderListDto;
     }
 }
