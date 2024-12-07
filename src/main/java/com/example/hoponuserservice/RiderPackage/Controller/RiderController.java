@@ -1,6 +1,6 @@
 package com.example.hoponuserservice.RiderPackage.Controller;
 
-import com.example.hoponuserservice.Exceptions.RiderAlreadyPresentException;
+import com.example.hoponuserservice.Exceptions.RiderExceptions;
 import com.example.hoponuserservice.dtos.*;
 import com.example.hoponuserservice.dtos.ResponseStatus;
 import com.example.hoponuserservice.model.Rider;
@@ -28,7 +28,7 @@ public class RiderController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<RiderCreationResponseDto> createNewRider(@Valid @RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderAlreadyPresentException {
+    public ResponseEntity<RiderCreationResponseDto> createNewRider(@Valid @RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderExceptions {
         Rider rider = riderService.createNewRider(
                 riderCreationRequestDto.getName(),
                 riderCreationRequestDto.getEmail(),
@@ -49,13 +49,16 @@ public class RiderController {
         return redisLocationService.findNearestDrivers(latitude, longitude, radiusInKm);
     }
 
-    @GetMapping("/all")
-    public RiderListDto getAllRiders()
-    {
-        List<Rider> riders=riderService.getAllRiders();
-        RiderListDto riderListDto=new RiderListDto();
-        riderListDto.setRiders(riders);
-        riderListDto.setResponseStatus(ResponseStatus.SUCCESS);
-        return riderListDto;
+    @PostMapping("/ride-request")
+    public void requestNewRide(RideRequestDto rideRequestDto) throws RiderExceptions {
+        long riderId=rideRequestDto.getRiderId();
+        double sourceLat=rideRequestDto.getSourceLat();
+        double sourceLong=rideRequestDto.getSourceLong();
+        double destLat=rideRequestDto.getDestLat();
+        double destLong=rideRequestDto.getDestLong();
+
+
+        String response=riderService.matchNewRideRequest(riderId,sourceLat,sourceLong,destLat,destLong);
+
     }
 }

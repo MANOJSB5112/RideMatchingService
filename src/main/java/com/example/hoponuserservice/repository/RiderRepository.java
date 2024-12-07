@@ -13,4 +13,6 @@ public interface RiderRepository extends JpaRepository<Rider, Long> {
 
   Optional<Rider> findRiderByEmail(String email);
   Rider save(Rider rider);
+
+  Optional<Rider> findRiderById(Long id);
 }

@@ -31,6 +31,5 @@ public class DistanceMatrixController {
             @RequestParam double endLat,
             @RequestParam double endLng) {
         return distanceMatrixService.getDistance(startLat, startLng, endLat, endLng);
-
     }
 }
