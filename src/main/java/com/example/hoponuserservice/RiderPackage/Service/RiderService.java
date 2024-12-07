@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface RiderService {
 
-    public Rider createNewRider(String name, String email, String phoneNumber, double latitude, double longitude) throws RiderAlreadyPresentException;
+    public Rider createNewRider(String name, String email, String phoneNumber) throws RiderAlreadyPresentException;
     List<Rider> getAllRiders();
 }

@@ -18,46 +18,44 @@ import java.util.List;
 @RequestMapping("/api/rider")
 public class RiderController {
 
-//    private final RiderService riderService;
-//    private RedisLocationService redisLocationService;
-//
-//    @Autowired
-//    public RiderController(RiderService riderService, RedisLocationService redisLocationService) {
-//        this.riderService = riderService;
-//        this.redisLocationService = redisLocationService;
-//    }
-//
-//    @PostMapping("/new")
-//    public ResponseEntity<RiderCreationResponseDto> createNewRider(@Valid @RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderAlreadyPresentException {
-//        Rider rider = riderService.createNewRider(
-//                riderCreationRequestDto.getName(),
-//                riderCreationRequestDto.getEmail(),
-//                riderCreationRequestDto.getPhoneNumber(),
-//                riderCreationRequestDto.getLatitude(),
-//                riderCreationRequestDto.getLongitude()
-//        );
-//
-//        RiderCreationResponseDto responseDto = new RiderCreationResponseDto();
-//        responseDto.setRider(rider);
-//        responseDto.setResponseStatus(ResponseStatus.SUCCESS);
-//
-//        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-//    }
-//
-//    @GetMapping("/nearest-drivers")
-//    public List<String> getNearestDrivers(@RequestParam double latitude,
-//                                          @RequestParam double longitude,
-//                                          @RequestParam double radiusInKm) {
-//        return redisLocationService.findNearestDrivers(latitude, longitude, radiusInKm);
-//    }
-//
-//    @GetMapping("/all")
-//    public RiderListDto getAllRiders()
-//    {
-//        List<Rider> riders=riderService.getAllRiders();
-//        RiderListDto riderListDto=new RiderListDto();
-//        riderListDto.setRiders(riders);
-//        riderListDto.setResponseStatus(ResponseStatus.SUCCESS);
-//        return riderListDto;
-//    }
+    private final RiderService riderService;
+    private RedisLocationService redisLocationService;
+
+    @Autowired
+    public RiderController(RiderService riderService, RedisLocationService redisLocationService) {
+        this.riderService = riderService;
+        this.redisLocationService = redisLocationService;
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<RiderCreationResponseDto> createNewRider(@Valid @RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderAlreadyPresentException {
+        Rider rider = riderService.createNewRider(
+                riderCreationRequestDto.getName(),
+                riderCreationRequestDto.getEmail(),
+                riderCreationRequestDto.getPhoneNumber()
+        );
+
+        RiderCreationResponseDto responseDto = new RiderCreationResponseDto();
+        responseDto.setRider(rider);
+        responseDto.setResponseStatus(ResponseStatus.SUCCESS);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/nearest-drivers")
+    public List<String> getNearestDrivers(@RequestParam double latitude,
+                                          @RequestParam double longitude,
+                                          @RequestParam double radiusInKm) {
+        return redisLocationService.findNearestDrivers(latitude, longitude, radiusInKm);
+    }
+
+    @GetMapping("/all")
+    public RiderListDto getAllRiders()
+    {
+        List<Rider> riders=riderService.getAllRiders();
+        RiderListDto riderListDto=new RiderListDto();
+        riderListDto.setRiders(riders);
+        riderListDto.setResponseStatus(ResponseStatus.SUCCESS);
+        return riderListDto;
+    }
 }
