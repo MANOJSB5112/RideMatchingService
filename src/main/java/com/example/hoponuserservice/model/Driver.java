@@ -1,16 +1,19 @@
 package com.example.hoponuserservice.model;
 
-import com.example.hoponuserservice.DriverService.Service.DiverService;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Driver {
-    private String id;
+@Entity
+public class Driver extends BaseModel{
     private String name;
     private String email;
     private String phoneNumber;
-    private Location location;
+    @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;
 }
