@@ -27,7 +27,7 @@ public class RiderController {
         this.redisLocationService = redisLocationService;
     }
 
-    @PostMapping("/new")
+    @PostMapping("/")
     public ResponseEntity<RiderCreationResponseDto> createNewRider(@Valid @RequestBody RiderCreationRequestDto riderCreationRequestDto) throws RiderExceptions {
         Rider rider = riderService.createNewRider(
                 riderCreationRequestDto.getName(),

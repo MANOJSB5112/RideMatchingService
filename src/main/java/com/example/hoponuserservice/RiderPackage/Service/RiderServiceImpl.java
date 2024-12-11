@@ -42,7 +42,7 @@ public class RiderServiceImpl implements RiderService{
 
         System.out.println("Creating rider");
         Rider rider= riderRepository.save(newRider);
-        System.out.println("User saved in db with the id "+rider.getId());
+        System.out.println("Rider saved in db with the id "+rider.getId());
         return rider;
     }
 
