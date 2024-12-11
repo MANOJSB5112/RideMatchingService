@@ -41,11 +41,16 @@ public class DriverController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @PostMapping("/location")
+    @PutMapping("/location")
     public String updateDriverLocation(@RequestParam String driverId,
                                        @RequestParam double latitude,
                                        @RequestParam double longitude) {
        driverService.updateDriverLocation(driverId,latitude,longitude);
         return "Location updated successfully for driverId"+driverId;
+    }
+
+    @PutMapping("/status")
+    public Driver updateDriverStatusAsAvailable(@RequestParam long driverId) throws DriverExceptions {
+        return driverService.updateDriverStatusAsAvailable(driverId);
     }
 }

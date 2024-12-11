@@ -1,8 +1,11 @@
 package com.example.hoponuserservice.RiderPackage.Controller;
 
+import com.example.hoponuserservice.Exceptions.DriverExceptions;
+import com.example.hoponuserservice.Exceptions.GoogleApiExceptions;
 import com.example.hoponuserservice.Exceptions.RiderExceptions;
 import com.example.hoponuserservice.dtos.*;
 import com.example.hoponuserservice.dtos.ResponseStatus;
+import com.example.hoponuserservice.model.Ride;
 import com.example.hoponuserservice.model.Rider;
 import com.example.hoponuserservice.RedisGeo.RedisLocationService;
 import com.example.hoponuserservice.RiderPackage.Service.RiderService;
@@ -50,7 +53,7 @@ public class RiderController {
     }
 
     @PostMapping("/ride-request")
-    public void requestNewRide(RideRequestDto rideRequestDto) throws RiderExceptions {
+    public ResponseEntity<RideResponseDto> requestNewRide(@RequestBody RideRequestDto rideRequestDto) throws RiderExceptions, GoogleApiExceptions, DriverExceptions {
         long riderId=rideRequestDto.getRiderId();
         double sourceLat=rideRequestDto.getSourceLat();
         double sourceLong=rideRequestDto.getSourceLong();
@@ -58,7 +61,12 @@ public class RiderController {
         double destLong=rideRequestDto.getDestLong();
 
 
-        String response=riderService.matchNewRideRequest(riderId,sourceLat,sourceLong,destLat,destLong);
+        Ride newRideRequest=riderService.matchNewRideRequest(riderId,sourceLat,sourceLong,destLat,destLong);
+
+        RideResponseDto responseDto=new RideResponseDto();
+        responseDto.setRide(newRideRequest);
+        responseDto.setResponseStatus(ResponseStatus.SUCCESS);
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
 
     }
 }

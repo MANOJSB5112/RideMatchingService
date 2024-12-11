@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RideRequestDto {
-    private Long riderId;
+    private long riderId;
     private double sourceLat;
     private double sourceLong;
     private double destLat;

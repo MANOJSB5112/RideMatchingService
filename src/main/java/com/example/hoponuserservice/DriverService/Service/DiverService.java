@@ -8,4 +8,5 @@ public interface DiverService {
 
     Driver createNewDriver(String name,String email,String phoneNumber) throws DriverExceptions;
     void updateDriverLocation( String driverId,double latitude,double longitude);
+    Driver updateDriverStatusAsAvailable(long driverId) throws DriverExceptions;
 }

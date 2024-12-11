@@ -1,7 +1,10 @@
 package com.example.hoponuserservice.RiderPackage.Service;
 
+import com.example.hoponuserservice.Exceptions.DriverExceptions;
+import com.example.hoponuserservice.Exceptions.GoogleApiExceptions;
 import com.example.hoponuserservice.Exceptions.RiderExceptions;
 import com.example.hoponuserservice.RideMatchingPackage.RideMatchingService;
+import com.example.hoponuserservice.model.Ride;
 import com.example.hoponuserservice.model.Rider;
 import com.example.hoponuserservice.repository.RiderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +50,11 @@ public class RiderServiceImpl implements RiderService{
     }
 
     @Override
-    public String matchNewRideRequest(Long riderId, double sourceLat, double sourceLong, double destLat, double destLong) throws RiderExceptions {
+    public Ride matchNewRideRequest(Long riderId, double sourceLat, double sourceLong, double destLat, double destLong) throws RiderExceptions, GoogleApiExceptions, DriverExceptions {
         Rider rider=validateAndGetRider(riderId);
         System.out.println("Ride request Processed......");
-        String response=rideMatchingService.matchNewRideRequest(rider,sourceLat,sourceLong,destLat,destLong);
-        return response;
+        Ride newRideRequest=rideMatchingService.matchNewRideRequest(rider,sourceLat,sourceLong,destLat,destLong);
+        return newRideRequest;
     }
 
     public Rider validateAndGetRider(Long id) throws RiderExceptions {

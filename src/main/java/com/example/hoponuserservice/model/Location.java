@@ -13,5 +13,13 @@ import lombok.Setter;
 public class Location extends BaseModel {
     private double latitude;
     private double longitude;
+
+    public Location(double sourceLat, double sourceLong) {
+        super();
+    }
+
+    public Location() {
+
+    }
 }
 

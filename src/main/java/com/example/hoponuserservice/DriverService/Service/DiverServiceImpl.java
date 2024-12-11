@@ -4,6 +4,7 @@ import com.example.hoponuserservice.Exceptions.DriverExceptions;
 import com.example.hoponuserservice.Exceptions.RiderExceptions;
 import com.example.hoponuserservice.RedisGeo.RedisLocationService;
 import com.example.hoponuserservice.model.Driver;
+import com.example.hoponuserservice.model.DriverStatus;
 import com.example.hoponuserservice.model.Rider;
 import com.example.hoponuserservice.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,17 @@ public class DiverServiceImpl implements DiverService{
     @Override
     public void updateDriverLocation(String driverId, double latitude, double longitude) {
         redisLocationService.addDriverLocation(driverId, latitude, longitude);
+    }
+
+    @Override
+    public Driver updateDriverStatusAsAvailable(long driverId) throws DriverExceptions {
+        Optional<Driver>  driverOptional=driverRepository.findById(driverId);
+        if(driverOptional.isEmpty())
+        {
+            throw new DriverExceptions("Driver not  found with the Id "+driverId+" for the updating as available ");
+        }
+        Driver driver=driverOptional.get();
+        driver.setDriverStatus(DriverStatus.AVAILABLE);
+        return driverRepository.save(driver);
     }
 }

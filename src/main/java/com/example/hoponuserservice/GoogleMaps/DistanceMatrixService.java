@@ -1,5 +1,7 @@
 package com.example.hoponuserservice.GoogleMaps;
 
+import com.example.hoponuserservice.Exceptions.GoogleApiExceptions;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ public class DistanceMatrixService {
     // Constants for fare calculation
     private static final double BASE_FARE = 50.0;
     private static final double PER_KM_RATE = 10.0;
-    public String getDistance(double originLat, double originLng, double destLat, double destLng) {
+    public String calculateEtaAndPrice(double originLat, double originLng, double destLat, double destLng) throws GoogleApiExceptions {
         RestTemplate restTemplate = new RestTemplate();
 
         // Construct the URL with latitudes and longitudes
@@ -34,6 +36,10 @@ public class DistanceMatrixService {
         JsonNode rootNode = null;
         try {
             rootNode = new ObjectMapper().readTree(response);
+        }catch (JsonProcessingException e)
+        {
+            throw new GoogleApiExceptions("Error in calculating ETA AND Price might be of JsonProcessingException ");
+        }
             JsonNode element = rootNode
                     .path("rows")
                     .path(0)
@@ -45,7 +51,7 @@ public class DistanceMatrixService {
             String durationText = element.path("duration").path("text").asText();  // e.g., "39 hours 5 mins"
 
             // Extract the numerical distance in kilometers (remove ' km' from the text)
-            String distanceKmStr = distanceText.replace(" km", "").replace(",", "");  // "3944" -> "3944 km"
+            String distanceKmStr = distanceText.replace(" km", "").replace(",", "");// "3944" -> "3944 km"
             double distanceKm = Double.parseDouble(distanceKmStr);  // Convert to double
 
             // Extract the duration in minutes (if needed, you can add more logic to handle hours)
@@ -64,16 +70,12 @@ public class DistanceMatrixService {
             double price = BASE_FARE + (distanceKm * PER_KM_RATE);
 
             // Calculate ETA (current time + duration in minutes)
-            long etaMillis = System.currentTimeMillis() + (long)(durationMinutes * 60 * 1000);
+            long etaMillis = System.currentTimeMillis() + (long) (durationMinutes * 60 * 1000);
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String eta = sdf.format(new java.util.Date(etaMillis));  // ETA in readable format
 
             // Return the details
-            return String.format("Distance: %.2f km, Duration: %s, Price: $%.2f, ETA: %s",
+            return String.format("%.2f,%s,%.2f,%s",
                     distanceKm, durationText, price, eta);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error calculating distance, duration, and price.";
-        }
     }
 }

@@ -22,4 +22,7 @@ public class Ride extends BaseModel{
     @Enumerated(EnumType.STRING)
     private RideStatus status;
     private double fare;
+    private double distance;
+    private String duration;
+    private String eta;
 }

@@ -1,5 +1,6 @@
 package com.example.hoponuserservice.GoogleMaps;
 
+import com.example.hoponuserservice.Exceptions.GoogleApiExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class DistanceMatrixController {
             @RequestParam double startLat,
             @RequestParam double startLng,
             @RequestParam double endLat,
-            @RequestParam double endLng) {
-        return distanceMatrixService.getDistance(startLat, startLng, endLat, endLng);
+            @RequestParam double endLng) throws GoogleApiExceptions {
+        return distanceMatrixService.calculateEtaAndPrice(startLat, startLng, endLat, endLng);
     }
 }
